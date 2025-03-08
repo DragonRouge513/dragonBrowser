@@ -50,41 +50,47 @@ class URL:
                     with open(self.path, "r", encoding="utf-8") as file:
                         return file.read()
                 except FileNotFoundError:
-                    return f"File not found: {self.path}" 
+                    return f"File not found: {self.path}"
         else:
-            s = socket.socket(
-                family=socket.AF_INET,
-                type=socket.SOCK_STREAM,
-                proto=socket.IPPROTO_TCP,
-            )
-            s.connect((self.host, self.port))
-            if self.scheme == "https":
-                ctx = ssl.create_default_context()
-                s = ctx.wrap_socket(s, server_hostname=self.host)
-            
-            # header
-            request = f"GET {self.path} HTTP/1.1\r\n"
-            request += f"HOST: {self.host}\r\n"
-            request += f"User-Agent: {self.userAgent}\r\n"
-            request += "\r\n"
-            # end header
+            try:
+                s = socket.socket(
+                    family=socket.AF_INET,
+                    type=socket.SOCK_STREAM,
+                    proto=socket.IPPROTO_TCP,
+                )
+                s.connect((self.host, self.port))
+                if self.scheme == "https":
+                    ctx = ssl.create_default_context()
+                    s = ctx.wrap_socket(s, server_hostname=self.host)
 
-            s.send(request.encode("utf8"))
-            response = s.makefile("r", encoding="utf8", newline="\r\n")
-            statusline = response.readline()
-            version, status, explanation = statusline.split(" ", 2)
-            response_headers = {}
-            while True:
-                line = response.readline()
-                if line == "\r\n": break
-                if ":" in line:
-                    header, value = line.split(":", 1)
-                    response_headers[header.casefold()] = value.strip()
-            assert "transfer-encoding" not in response_headers
-            assert "content-encoding" not in response_headers
-            content = response.read()
-            s.close()
-            return content
+                # header
+                request = f"GET {self.path} HTTP/1.1\r\n"
+                request += f"HOST: {self.host}\r\n"
+                request += f"User-Agent: {self.userAgent}\r\n"
+                request += "\r\n"
+                # end header
+
+                s.send(request.encode("utf8"))
+                response = s.makefile("rb", newline="\r\n")
+                statusline = response.readline().decode('utf-8')
+                version, status, explanation = statusline.split(" ", 2)
+                print(f"Status: {status} {explanation.strip()}")  # Debugging line
+                response_headers = {}
+                while True:
+                    line = response.readline().decode('utf-8')
+                    if line == "\r\n": break
+                    if ":" in line:
+                        header, value = line.split(":", 1)
+                        response_headers[header.casefold()] = value.strip()
+                print(f"Headers: {response_headers}")  # Debugging line
+                assert "transfer-encoding" not in response_headers
+                assert "content-encoding" not in response_headers
+                content_length = int(response_headers.get('content-length', 0))
+                content = response.read(content_length).decode('utf-8')
+                s.close()
+                return content
+            except Exception as e:
+                return f"An error occurred: {e}"
 
 def show(body) -> None:
     in_tag = False
