@@ -18,4 +18,5 @@ when run more than 1 argument <br/>
 other question contact me<br/>
 ## additional resources
 https://browser.engineering
+https://openmoji.org/
 ## License information
