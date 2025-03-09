@@ -94,9 +94,12 @@ other question contact me
 ## Changelog
 can open url:
 - http
+  - can contain some Entities (\&lt; \&gt;)
 - https
+  - can contain some Entities (\&lt; \&gt;)
 - files
 - directories
+- 
 ## additional resources
 https://browser.engineering
 ## License information
