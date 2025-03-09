@@ -13,11 +13,15 @@ class Browser:
         self.canvas = tkinter.Canvas(self.window, width=WIDTH, height=HEIGHT)
         self.canvas.pack()
         self.scroll = 0
-        self.window.bind("<Down>", self.scroll)
+        self.window.bind("<Down>", self.scrolldown)
 
     def draw(self):
         self.canvas.delete("all")
         for x, y, c in self.display_list:
+            if y > self.scroll + HEIGHT:
+                continue
+            if y + VSTEP < self.scroll:
+                continue
             self.canvas.create_text(x, y - self.scroll, text=c)
 
     def load(self, url) -> None:

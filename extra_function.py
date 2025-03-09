@@ -33,11 +33,15 @@ def layout(text, HSTEP, VSTEP, WIDTH, HEIGHT):
     display_list = []
     cursor_x, cursor_y = HSTEP, VSTEP
     for c in text:
-        display_list.append((cursor_x, cursor_y, c))
-        cursor_x += HSTEP
-        if cursor_x >= WIDTH - HSTEP:
+        if c == "\n":
             cursor_y += VSTEP
             cursor_x = HSTEP
+        else:
+            display_list.append((cursor_x, cursor_y, c))
+            cursor_x += HSTEP
+            if cursor_x >= WIDTH - HSTEP:
+                cursor_y += VSTEP
+                cursor_x = HSTEP
     return display_list
 
 
@@ -63,6 +67,3 @@ def lex(body) -> None:
             text += body[i]
         i += 1
     return text
-
-
-# for gui
