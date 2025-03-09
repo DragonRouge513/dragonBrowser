@@ -7,6 +7,7 @@ import gzip
 import base64
 from urllib.parse import urljoin, unquote
 
+
 class URL:
     def __init__(self, url) -> None:
         self.userAgent = (
@@ -36,7 +37,7 @@ class URL:
                 self.port = int(port)
         elif url.startswith("data:"):
             self.scheme = "data"
-            self.data = url[len("data:"):]
+            self.data = url[len("data:") :]
         else:
             self.scheme, url = url.split("://", 1)
             assert self.scheme in ["http", "https"]
@@ -137,13 +138,17 @@ class URL:
                     new_url = response_headers.get("location")
                     if new_url:
                         # Handle relative URLs
-                        new_url = urljoin(f"{self.scheme}://{self.host}{self.path}", new_url)
+                        new_url = urljoin(
+                            f"{self.scheme}://{self.host}{self.path}", new_url
+                        )
                         print(f"Redirecting to: {new_url}")
                         s.close()
                         return URL(new_url).request()
 
                 content_encoding = response_headers.get("content-encoding", "").lower()
-                transfer_encoding = response_headers.get("transfer-encoding", "").lower()
+                transfer_encoding = response_headers.get(
+                    "transfer-encoding", ""
+                ).lower()
 
                 if transfer_encoding == "chunked":
                     content = b""
@@ -180,7 +185,7 @@ class URL:
                     print(f"Cached response for: {cache_key}")
 
                 if self.source:
-                    return f"<pre> / {content} /</pre>"
+                    return f"<pre> {content} </pre>"
                 return content
             except Exception as e:
                 return f"An error occurred: {e}"

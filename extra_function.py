@@ -1,3 +1,4 @@
+# for terminal
 def show(body) -> None:
     in_tag = False
     i = 0
@@ -20,6 +21,48 @@ def show(body) -> None:
             print(body[i], end="")
         i += 1
 
+
+# for terminal
 def load(url) -> None:
     body = url.request()
     show(body)
+
+
+# for gui
+def layout(text, HSTEP, VSTEP, WIDTH, HEIGHT):
+    display_list = []
+    cursor_x, cursor_y = HSTEP, VSTEP
+    for c in text:
+        display_list.append((cursor_x, cursor_y, c))
+        cursor_x += HSTEP
+        if cursor_x >= WIDTH - HSTEP:
+            cursor_y += VSTEP
+            cursor_x = HSTEP
+    return display_list
+
+
+# for gui
+def lex(body) -> None:
+    text = ""
+    in_tag = False
+    i = 0
+    while i < len(body):
+        if body[i] == "<":
+            in_tag = True
+        elif body[i] == ">":
+            in_tag = False
+        elif body[i : i + 4] == "&lt;":
+            if not in_tag:
+                text += "<"
+            i += 3
+        elif body[i : i + 4] == "&gt;":
+            if not in_tag:
+                text += ">"
+            i += 3
+        elif not in_tag:
+            text += body[i]
+        i += 1
+    return text
+
+
+# for gui

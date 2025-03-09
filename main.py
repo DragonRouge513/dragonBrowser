@@ -1,6 +1,9 @@
 from url import URL
-from extra_function import load, show
+
+# from extra_function import load, show
+from browser import Browser
 import sys
+import tkinter
 
 
 def main():
@@ -9,14 +12,17 @@ def main():
         # default_file = "file:///home/antoine/Documents/obsidian/projects/browser/browser.py"
         default_file = "file:///"
         url = URL(default_file)
+        browser = Browser()
+        browser.load(url)
         # url = "This is a test &lt;body&gt; with &lt; and &gt; symbols."
     elif len(sys.argv) == 2:
         url = URL(sys.argv[1])
+        browser = Browser()
+        browser.load(url)
     else:
         print("Usage: python3 browser.py <url>")
         sys.exit(1)
-
-    load(url)
+    tkinter.mainloop()
 
 
 if __name__ == "__main__":
