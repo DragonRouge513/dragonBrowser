@@ -1,5 +1,7 @@
-import browser, extra_function
+from browser import URL
+from extra_function import load, show
 import sys
+
 
 def main():
     if len(sys.argv) == 1:
