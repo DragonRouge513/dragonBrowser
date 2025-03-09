@@ -10,8 +10,10 @@ A custom browser based on the tutorial of "https://browser.engineering"
 
 ## Examples
 ### 0 argument
-`python3 browser.py`
-`
+```sh
+python3 browser.py
+```
+```
 This is a Directory(/) with this contents:
 Directory: boot
 Directory: dev
@@ -36,10 +38,12 @@ Directory: usr
 Directory: var
 File: .hcwd
 File: system-update
-`
+```
 ### 1 argument
-`python3 browser.py file:///var`
-`
+```sh
+python3 browser.py file:///var
+```
+```
 This is a Directory(/var/) with this contents:
 Directory: lock
 Directory: mail
@@ -63,14 +67,22 @@ Directory: spool
 Directory: tmp
 Directory: yp
 File: .updated
-`
+```
 ### 1 argument
-`python3 browser.py file:///proc/version`
-`Linux version 6.12.15-200.fc41.x86_64 (mockbuild@c444002bca6b4b5181a31926b883aace) (gcc (GCC) 14.2.1 20250110 (Red Hat 14.2.1-7), GNU ld version 2.43.1-5.fc41) #1 SMP PREEMPT_DYNAMIC Tue Feb 18 15:24:05 UTC 2025`
+```sh
+python3 browser.py file:///proc/version
+```
+```
+Linux version 6.12.15-200.fc41.x86_64 (mockbuild@c444002bca6b4b5181a31926b883aace) (gcc (GCC) 14.2.1 20250110 (Red Hat 14.2.1-7), GNU ld version 2.43.1-5.fc41) #1 SMP PREEMPT_DYNAMIC Tue Feb 18 15:24:05 UTC 2025
+```
 ### 1 argument
-`python3 browser.py http://example.com`
+```sh
+python3 browser.py http://example.com
+```
 ### 1 argument
-`python3 browser.py https://example.com`
+```sh
+python3 browser.py https://example.com
+```
 ## Troubleshooting
 when run without any arguments:
   it show the content of your root direcory
