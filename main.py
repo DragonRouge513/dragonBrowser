@@ -1,4 +1,4 @@
-from browser import URL
+from url import URL
 from extra_function import load, show
 import sys
 
