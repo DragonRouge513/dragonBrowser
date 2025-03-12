@@ -188,4 +188,5 @@ class URL:
                     return f"<pre> {content} </pre>"
                 return content
             except Exception as e:
-                return f"An error occurred: {e}"
+            # return f"An error occurred: {e}"
+                return "about:blank"

@@ -19,6 +19,10 @@ def main():
         url = URL(sys.argv[1])
         browser = Browser()
         browser.load(url)
+    elif len(sys.argv) == 3:
+        url = URL(sys.argv[1])
+        browser = Browser()
+        browser.load(url) 
     else:
         print("Usage: python3 browser.py <url>")
         sys.exit(1)

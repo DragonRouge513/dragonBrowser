@@ -29,27 +29,37 @@ def load(url) -> None:
 
 
 # for gui
-def layout(text, HSTEP, VSTEP, WIDTH, HEIGHT):
+def layout(text, HSTEP, VSTEP, WIDTH, HEIGHT, is_rtl=False):
     display_list = []
-    cursor_x, cursor_y = HSTEP, VSTEP
+    cursor_x, cursor_y = HSTEP, VSTEP if not is_rtl else WIDTH - HSTEP
+
     for c in text:
         if c == "\n":
             cursor_y += VSTEP
-            cursor_x = HSTEP
+            cursor_x = HSTEP if not is_rtl else WIDTH - HSTEP
         else:
             display_list.append((cursor_x, cursor_y, c))
-            cursor_x += HSTEP
-            if cursor_x >= WIDTH - HSTEP:
-                cursor_y += VSTEP
-                cursor_x = HSTEP
+            if is_rtl:
+                cursor_x -= HSTEP
+                if cursor_x <= HSTEP:
+                    cursor_y += VSTEP
+                    cursor_x = WIDTH - HSTEP
+            else:
+                cursor_x += HSTEP
+                if cursor_x >= WIDTH - HSTEP:
+                    cursor_y += VSTEP
+                    cursor_x = HSTEP
+
     return display_list
 
 
 # for gui
-def lex(body) -> None:
+def lex(body) -> str:
     text = ""
     in_tag = False
     i = 0
+    if body == "about:blank":
+        return ""
     while i < len(body):
         if body[i] == "<":
             in_tag = True

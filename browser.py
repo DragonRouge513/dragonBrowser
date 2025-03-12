@@ -6,7 +6,6 @@ import os
 HSTEP, VSTEP = 10, 20
 SCROLL_STEP = 100
 SCROLLBAR_WIDTH = 10
-EMOJI_DIR = "openmoji-72x72-color"  # Directory where OpenMoji images are stored
 
 
 class Browser:
@@ -16,9 +15,9 @@ class Browser:
         self.canvas.pack(fill=tkinter.BOTH, expand=True)
         self.scroll_x = 0
         self.scroll_y = 0
+        self.is_rtl = False
         self.body = ""  # Initialize body attribute
         self.display_list = []  # Initialize display list
-        self.emoji_images = {}  # Cache for loaded emoji images
         self.window.bind("<Button-4>", self.scrollup)  # Linux
         self.window.bind("<Button-5>", self.scrolldown)  # Linux
         self.window.bind("<MouseWheel>", self.on_mouse_wheel)  # Windows and macOS
@@ -46,8 +45,6 @@ class Browser:
                 continue
             if y + VSTEP < self.scroll_y or x + HSTEP < self.scroll_x:
                 continue
-            if c in self.emoji_images:
-                self.canvas.create_image(x - self.scroll_x, y - self.scroll_y, image=self.emoji_images[c], anchor='nw')
             else:
                 self.canvas.create_text(x - self.scroll_x, y - self.scroll_y, text=c)
 
@@ -78,17 +75,8 @@ class Browser:
     def load(self, url) -> None:
         self.body = url.request()  # Store body content
         text = lex(self.body)
-        self.display_list = layout(text, HSTEP, VSTEP, self.window.winfo_width(), self.window.winfo_height())
-        self.load_emoji_images()
+        self.display_list = layout(text, HSTEP, VSTEP, self.window.winfo_width(), self.window.winfo_height(), is_rtl=self.is_rtl)
         self.draw()
-
-    def load_emoji_images(self):
-        for _, _, c in self.display_list:
-            if c in self.emoji_images:
-                continue
-            emoji_path = os.path.join(EMOJI_DIR, f"{ord(c):x}.png")
-            if os.path.exists(emoji_path):
-                self.emoji_images[c] = tkinter.PhotoImage(file=emoji_path)
 
     def scrolldown(self, e):
         self.scroll_y += SCROLL_STEP
@@ -120,7 +108,7 @@ class Browser:
 
     def on_resize(self, event):
         text = lex(self.body)
-        self.display_list = layout(text, HSTEP, VSTEP, event.width, event.height)
+        self.display_list = layout(text, HSTEP, VSTEP, event.width, event.height, is_rtl=self.is_rtl)
         self.draw()
 
 
